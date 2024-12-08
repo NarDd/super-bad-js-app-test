@@ -3,13 +3,13 @@ on:
   pull_request: {}
   push:
     branches:
-    - main
-    - master
+      - main
+      - master
     paths:
-    - .github/workflows/semgrep.yml
+      - .github/workflows/semgrep.yml
   schedule:
-  # random HH:MM to avoid a load spike on GitHub Actions at 00:00
-  - cron: 41 17 * * *
+    # random HH:MM to avoid a load spike on GitHub Actions at 00:00
+    - cron: 41 17 * * *
 name: Semgrep
 jobs:
   semgrep:
@@ -22,11 +22,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: run semgrep scan
-        env: 
+        env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
         run: semgrep ci \
-              --sarif --output report.sarif
-    
+          --sarif --output report.sarif
+
       - name: save pipeline artifact
         uses: actions/upload-artifact@v3
         with:
@@ -39,4 +39,3 @@ jobs:
         with:
           sarif_file: report.sarif
           category: semgrep
-
