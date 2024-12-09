@@ -37,7 +37,6 @@ jobs:
         with:
           name: report.sarif
           path: report.sarif
-        if: true
 
       # step 4
       - name: publish code scanning alerts
@@ -45,4 +44,3 @@ jobs:
         with:
           sarif_file: report.sarif
           category: semgrep
-        if: true
