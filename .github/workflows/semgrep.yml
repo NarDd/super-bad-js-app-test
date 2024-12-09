@@ -21,26 +21,12 @@ jobs:
     container:
       image: returntocorp/semgrep
     steps:
-      - name: checkout code
-        uses: actions/checkout@v4
-
-      - name: run semgrep scan
+      - uses: actions/checkout@v4
+      - run: semgrep ci --sarif > semgrep.sarif
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-        continue-on-error: true
-        run: |
-          semgrep ci \
-            --sarif --output report.sarif
-
-      - name: save pipeline artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: report.sarif
-          path: report.sarif
-
-      # step 4
-      - name: publish code scanning alerts
+      - name: Upload SARIF file for Security Dashboard
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: report.sarif
-          category: semgrep
+          sarif_file: semgrep.sarif
+        if: always()
